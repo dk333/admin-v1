@@ -2,9 +2,9 @@ package rbac
 
 import (
 	//"fmt"
-	"github.com/astaxie/beego"
 	. "github.com/beego/admin/src"
 	m "github.com/beego/admin/src/models"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 type MainController struct {
@@ -29,9 +29,10 @@ type Attributes struct {
 func (this *MainController) Index() {
 	userinfo := this.GetSession("userinfo")
 	if userinfo == nil {
-		this.Ctx.Redirect(302, beego.AppConfig.String("rbac_auth_gateway"))
+		s, _ := beego.AppConfig.String("rbac_auth_gateway")
+		this.Ctx.Redirect(302, s)
 	}
-	tree:=this.GetTree()
+	tree := this.GetTree()
 	if this.IsAjax() {
 		this.Data["json"] = &tree
 		this.ServeJSON()
@@ -41,7 +42,7 @@ func (this *MainController) Index() {
 		this.Data["userinfo"] = userinfo
 		this.Data["groups"] = groups
 		this.Data["tree"] = &tree
-		if this.GetTemplatetype() != "easyui"{
+		if this.GetTemplatetype() != "easyui" {
 			this.Layout = this.GetTemplatetype() + "/public/layout.tpl"
 		}
 		this.TplName = this.GetTemplatetype() + "/public/index.tpl"
@@ -84,7 +85,8 @@ func (this *MainController) Logout() {
 func (this *MainController) Changepwd() {
 	userinfo := this.GetSession("userinfo")
 	if userinfo == nil {
-		this.Ctx.Redirect(302, beego.AppConfig.String("rbac_auth_gateway"))
+		s, _ := beego.AppConfig.String("rbac_auth_gateway")
+		this.Ctx.Redirect(302, s)
 	}
 	oldpassword := this.GetString("oldpassword")
 	newpassword := this.GetString("newpassword")

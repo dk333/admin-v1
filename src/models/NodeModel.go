@@ -4,9 +4,9 @@ import (
 	"errors"
 	"log"
 
-	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 //节点表
@@ -23,7 +23,8 @@ type Node struct {
 }
 
 func (n *Node) TableName() string {
-	return beego.AppConfig.String("rbac_node_table")
+	s, _ := beego.AppConfig.String("rbac_node_table")
+	return s
 }
 
 //验证用户信息

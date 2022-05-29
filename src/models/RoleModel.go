@@ -4,9 +4,9 @@ import (
 	"errors"
 	"log"
 
-	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 //角色表
@@ -21,7 +21,8 @@ type Role struct {
 }
 
 func (r *Role) TableName() string {
-	return beego.AppConfig.String("rbac_role_table")
+	s, _ := beego.AppConfig.String("rbac_role_table")
+	return s
 }
 
 func init() {

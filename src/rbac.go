@@ -6,17 +6,20 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/context"
+	beecontext "github.com/beego/beego/v2/server/web/context"
+
 	. "github.com/beego/admin/src/lib"
 	m "github.com/beego/admin/src/models"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 //check access and register user's nodes
 func AccessRegister() {
-	var Check = func(ctx *context.Context) {
-		user_auth_type, _ := strconv.Atoi(beego.AppConfig.String("user_auth_type"))
-		rbac_auth_gateway := beego.AppConfig.String("rbac_auth_gateway")
+	var Check = func(ctx *beecontext.Context) {
+		s, _ := beego.AppConfig.String("user_auth_type")
+		user_auth_type, _ := strconv.Atoi(s)
+		s, _ = beego.AppConfig.String("rbac_auth_gateway")
+		rbac_auth_gateway := s
 		var accesslist map[string]bool
 		if user_auth_type > 0 {
 			params := strings.Split(strings.ToLower(strings.Split(ctx.Request.RequestURI, "?")[0]), "/")
@@ -24,10 +27,10 @@ func AccessRegister() {
 				uinfo := ctx.Input.Session("userinfo")
 				if uinfo == nil {
 					ctx.Redirect(302, rbac_auth_gateway)
-                    return
+					return
 				}
 				//admin用户不用认证权限
-				adminuser := beego.AppConfig.String("rbac_admin_user")
+				adminuser, _ := beego.AppConfig.String("rbac_admin_user")
 				if uinfo.(m.User).Username == adminuser {
 					return
 				}
@@ -58,7 +61,8 @@ func CheckAccess(params []string) bool {
 	if len(params) < 3 {
 		return false
 	}
-	for _, nap := range strings.Split(beego.AppConfig.String("not_auth_package"), ",") {
+	s, _ := beego.AppConfig.String("not_auth_package")
+	for _, nap := range strings.Split(s, ",") {
 		if params[1] == nap {
 			return false
 		}

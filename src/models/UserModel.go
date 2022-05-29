@@ -5,10 +5,10 @@ import (
 	"log"
 	"time"
 
-	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
 	. "github.com/beego/admin/src/lib"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 //用户表
@@ -27,7 +27,8 @@ type User struct {
 }
 
 func (u *User) TableName() string {
-	return beego.AppConfig.String("rbac_user_table")
+	s, _ := beego.AppConfig.String("rbac_user_table")
+	return s
 }
 
 func (u *User) Valid(v *validation.Validation) {

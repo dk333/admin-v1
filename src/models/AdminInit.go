@@ -6,9 +6,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	. "github.com/beego/admin/src/lib"
+	beego "github.com/beego/beego/v2/server/web"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
@@ -42,14 +43,14 @@ func Syncdb() {
 //数据库连接
 func Connect() {
 	var dsn string
-	db_type := beego.AppConfig.String("db_type")
-	db_host := beego.AppConfig.String("db_host")
-	db_port := beego.AppConfig.String("db_port")
-	db_user := beego.AppConfig.String("db_user")
-	db_pass := beego.AppConfig.String("db_pass")
-	db_name := beego.AppConfig.String("db_name")
-	db_path := beego.AppConfig.String("db_path")
-	db_sslmode := beego.AppConfig.String("db_sslmode")
+	db_type, _ := beego.AppConfig.String("db_type")
+	db_host, _ := beego.AppConfig.String("db_host")
+	db_port, _ := beego.AppConfig.String("db_port")
+	db_user, _ := beego.AppConfig.String("db_user")
+	db_pass, _ := beego.AppConfig.String("db_pass")
+	db_name, _ := beego.AppConfig.String("db_name")
+	db_path, _ := beego.AppConfig.String("db_path")
+	db_sslmode, _ := beego.AppConfig.String("db_sslmode")
 	switch db_type {
 	case "mysql":
 		orm.RegisterDriver("mysql", orm.DRMySQL)
@@ -66,7 +67,7 @@ func Connect() {
 		dsn = fmt.Sprintf("%s%s.db", db_path, db_name)
 		break
 	default:
-		beego.Critical("Database driver is not allowed:", db_type)
+		logs.Critical("Database driver is not allowed:", db_type)
 	}
 	orm.RegisterDataBase("default", db_type, dsn)
 }
@@ -74,14 +75,14 @@ func Connect() {
 //创建数据库
 func createdb() {
 
-	db_type := beego.AppConfig.String("db_type")
-	db_host := beego.AppConfig.String("db_host")
-	db_port := beego.AppConfig.String("db_port")
-	db_user := beego.AppConfig.String("db_user")
-	db_pass := beego.AppConfig.String("db_pass")
-	db_name := beego.AppConfig.String("db_name")
-	db_path := beego.AppConfig.String("db_path")
-	db_sslmode := beego.AppConfig.String("db_sslmode")
+	db_type, _ := beego.AppConfig.String("db_type")
+	db_host, _ := beego.AppConfig.String("db_host")
+	db_port, _ := beego.AppConfig.String("db_port")
+	db_user, _ := beego.AppConfig.String("db_user")
+	db_pass, _ := beego.AppConfig.String("db_pass")
+	db_name, _ := beego.AppConfig.String("db_name")
+	db_path, _ := beego.AppConfig.String("db_path")
+	db_sslmode, _ := beego.AppConfig.String("db_sslmode")
 
 	var dsn string
 	var sqlstring string
@@ -103,7 +104,7 @@ func createdb() {
 		sqlstring = "create table init (n varchar(32));drop table init;"
 		break
 	default:
-		beego.Critical("Database driver is not allowed:", db_type)
+		logs.Critical("Database driver is not allowed:", db_type)
 	}
 	db, err := sql.Open(db_type, dsn)
 	if err != nil {
