@@ -5,9 +5,9 @@ import (
 	"mime"
 	"os"
 
-	"github.com/astaxie/beego"
 	. "github.com/beego/admin/src/lib"
 	"github.com/beego/admin/src/models"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 const VERSION = "0.1.1"

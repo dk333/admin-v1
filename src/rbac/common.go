@@ -1,9 +1,9 @@
 package rbac
 
 import (
-	"github.com/astaxie/beego"
 	. "github.com/beego/admin/src"
 	m "github.com/beego/admin/src/models"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 type CommonController struct {
@@ -17,7 +17,7 @@ func (this *CommonController) Rsp(status bool, str string) {
 }
 
 func (this *CommonController) GetTemplatetype() string {
-	templatetype := beego.AppConfig.String("template_type")
+	templatetype, _ := beego.AppConfig.String("template_type")
 	if templatetype == "" {
 		templatetype = "easyui"
 	}
